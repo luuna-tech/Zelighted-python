@@ -16,7 +16,7 @@ warnings.warn(
 from delighted.http_adapter import HTTPAdapter  # noqa
 
 api_key = None
-api_base_url = 'https://api.delightedapp.com/v1/'
+api_base_url = 'http://localhost:8001/api/v1/'
 http_adapter = HTTPAdapter()
 shared_client = None
 
