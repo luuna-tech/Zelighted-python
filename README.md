@@ -10,32 +10,26 @@ pip install --upgrade zelighted
 
 ## Configuration
 
-The library supports three environments with automatic detection:
-
-| Environment | Base URL |
-|-------------|----------|
-| `develop` (default) | `http://localhost:8001/api/v1/` |
-| `staging` | `https://api-stg.zeb.mx/api/v1/` |
-| `production` | `https://api.zeb.mx/api/v1/` |
-
 ### Option 1: Environment variables
 
 ```bash
-export ZELIGHTED_ENV=production
+export ZELIGHTED_API_URL=https://api.zeb.mx/api/v1/
 export ZELIGHTED_API_KEY=your_api_key
 ```
 
-On import, `zelighted` reads `ZELIGHTED_ENV` (defaults to `develop` if unset or invalid) and `ZELIGHTED_API_KEY` automatically.
+On import, `zelighted` reads `ZELIGHTED_API_URL` (defaults to `http://localhost:8001/api/v1/` if unset) and `ZELIGHTED_API_KEY` automatically.
+
+Common URL values:
+- Local development: `http://localhost:8001/api/v1/`
+- Staging: `https://api-stg.zeb.mx/api/v1/`
+- Production: `https://api.zeb.mx/api/v1/`
 
 ### Option 2: `zelighted.configure()`
 
 ```python
 import zelighted
 
-zelighted.configure(env='staging', api_key='YOUR_API_KEY')
-
-# Or with an explicit URL (overrides env preset):
-zelighted.configure(api_base_url='https://custom.example.com/api/v1/', api_key='YOUR_API_KEY')
+zelighted.configure(api_base_url='https://api.zeb.mx/api/v1/', api_key='YOUR_API_KEY')
 ```
 
 If `python-dotenv` is installed, `configure()` loads `.env` automatically before applying config. If `python-dotenv` is missing or `.env` is absent, this is silently skipped.
@@ -46,16 +40,7 @@ If `python-dotenv` is installed, `configure()` loads `.env` automatically before
 import zelighted
 
 zelighted.api_key = 'YOUR_API_KEY'
-zelighted.api_base_url = zelighted.ENVIRONMENTS['production']
-```
-
-### Checking the active environment
-
-```python
-import zelighted
-
-print(zelighted.current_env())  # 'develop', 'staging', 'production', or 'custom'
-print(zelighted.ENVIRONMENTS)   # {'develop': '...', 'staging': '...', 'production': '...'}
+zelighted.api_base_url = 'https://api.zeb.mx/api/v1/'
 ```
 
 **Note:** Your API key is secret and should be treated like a password.
