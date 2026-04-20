@@ -1,3 +1,14 @@
+## 5.1.0 (2026-04-20)
+
+Features:
+
+- Multi-environment support: `ENVIRONMENTS` dict with `develop`, `staging`, `production` presets
+- `ZELIGHTED_ENV` env var auto-detection on import (defaults to `develop`)
+- `ZELIGHTED_API_KEY` env var auto-detection on import
+- `zelighted.configure(env, api_key, api_base_url)` convenience function with optional dotenv loading
+- `zelighted.current_env()` returns active environment name
+- `Client(env=...)` constructor parameter for per-client environment selection
+
 ## 5.0.0 (2026-04-20)
 
 Rebranding:

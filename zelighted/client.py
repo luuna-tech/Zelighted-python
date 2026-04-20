@@ -17,9 +17,18 @@ from zelighted.util import encode
 
 class Client(object):
 
-    def __init__(self, api_key=None, api_base_url=None, http_adapter=None):
+    def __init__(self, api_key=None, api_base_url=None, http_adapter=None, env=None):
         self.api_key = api_key or zelighted.api_key
-        self.api_base_url = api_base_url or zelighted.api_base_url
+
+        if api_base_url is not None:
+            self.api_base_url = api_base_url
+        elif env is not None:
+            if env not in zelighted.ENVIRONMENTS:
+                raise ValueError("env must be one of: %s" % ', '.join(zelighted.ENVIRONMENTS))
+            self.api_base_url = zelighted.ENVIRONMENTS[env]
+        else:
+            self.api_base_url = zelighted.api_base_url
+
         self.http_adapter = http_adapter or zelighted.http_adapter
 
         if self.api_key is None:
