@@ -1,15 +1,15 @@
 import unittest
 
-import delighted
+import zelighted
 
 
 class ClientTest(unittest.TestCase):
 
     def test_instantiating_client_requires_api_key(self):
-        original_api_key = delighted.api_key
+        original_api_key = zelighted.api_key
         try:
-            delighted.api_key = None
-            self.assertRaises(ValueError, lambda: delighted.Client())
-            delighted.Client(api_key='abc123')
+            zelighted.api_key = None
+            self.assertRaises(ValueError, lambda: zelighted.Client())
+            zelighted.Client(api_key='abc123')
         except:
-            delighted.api_key = original_api_key
+            zelighted.api_key = original_api_key

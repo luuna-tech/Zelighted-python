@@ -1,37 +1,38 @@
 import json
 import unittest
 
-from mock import Mock, patch
+from unittest.mock import Mock, patch
 
-import delighted
+import zelighted
 
 
 get_headers = {
     'Accept': 'application/json',
     'Authorization': 'Basic YWJjMTIz',
-    'User-Agent': "Delighted Python %s" % delighted.__version__
+    'User-Agent': "Zelighted Python %s" % zelighted.__version__
 }
 post_headers = get_headers.copy()
 post_headers.update({'Content-Type': 'application/json'})
 
 
-class DelightedTestCase(unittest.TestCase):
+class ZelightedTestCase(unittest.TestCase):
 
     def setUp(self):
-        super(DelightedTestCase, self).setUp()
+        super(ZelightedTestCase, self).setUp()
 
-        delighted.api_key = 'abc123'
+        zelighted.api_key = 'abc123'
+        zelighted.api_base_url = 'https://api.delightedapp.com/v1/'
 
         self.request_patcher = patch('requests.request')
         self.request_mock = self.request_patcher.start()
 
     def tearDown(self):
-        super(DelightedTestCase, self).tearDown()
+        super(ZelightedTestCase, self).tearDown()
 
         self.request_patcher.stop()
 
     def mock_response(self, status_code, headers, data, links=None):
-        self.mock_multiple_responses([delighted.http_response.HTTPResponse(status_code, headers, data, links)])
+        self.mock_multiple_responses([zelighted.http_response.HTTPResponse(status_code, headers, data, links)])
 
     def mock_multiple_responses(self, responses):
         mock_responses = []

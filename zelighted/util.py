@@ -2,7 +2,6 @@ import calendar
 import datetime
 import time
 
-import six
 import tzlocal
 
 
@@ -13,14 +12,18 @@ def _encode_datetime(dttime):
     else:
         if isinstance(dttime, datetime.date):
             dttime = naive_date_to_datetime(dttime)
-        local_datetime = tzlocal.get_localzone().localize(dttime)
+        tz = tzlocal.get_localzone()
+        if hasattr(tz, 'localize'):
+            local_datetime = tz.localize(dttime)
+        else:
+            local_datetime = dttime.replace(tzinfo=tz)
         utc_timestamp = aware_datetime_to_epoch_seconds(local_datetime)
 
     return int(utc_timestamp)
 
 
 def encode(data):
-    for key, value in six.iteritems(data):
+    for key, value in data.items():
         if value is None:
             continue
         elif isinstance(value, list) or isinstance(value, tuple):
@@ -28,7 +31,7 @@ def encode(data):
                 yield ("%s[]" % (key,), subvalue)
         elif isinstance(value, dict):
             subdict = dict(('%s[%s]' % (key, subkey), subvalue) for
-                           subkey, subvalue in six.iteritems(value))
+                           subkey, subvalue in value.items())
             for subkey, subvalue in encode(subdict):
                 yield (subkey, subvalue)
         elif (isinstance(value, datetime.datetime) or
