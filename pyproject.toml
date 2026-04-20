@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "zelighted"
+dynamic = ["version"]
+description = "Zelighted API Python Client"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [{name = "Zebrands", email = "zetech-checkout@zeb.mx"}]
+requires-python = ">=3.8"
+dependencies = ["requests", "tzlocal"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+
+[project.optional-dependencies]
+dotenv = ["python-dotenv"]
+
+[project.urls]
+Homepage = "https://github.com/luuna-tech/Zelighted-python"
+Repository = "https://github.com/luuna-tech/Zelighted-python"
+Changelog = "https://github.com/luuna-tech/Zelighted-python/blob/master/CHANGELOG.md"
+
+[tool.setuptools.packages.find]
+include = ["zelighted*"]
+
+[tool.setuptools.dynamic]
+version = {attr = "zelighted.__version__"}
+
+[tool.pytest.ini_options]
+testpaths = ["test"]

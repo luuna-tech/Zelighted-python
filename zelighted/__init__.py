@@ -1,8 +1,9 @@
 import os
 
 __title__ = 'zelighted'
-__version__ = '5.1.0'
+__version__ = '5.2.0'
 __author__ = 'Zebrands'
+__author_email__ = 'zetech-checkout@zeb.mx'
 __license__ = 'MIT'
 
 from zelighted.http_adapter import HTTPAdapter  # noqa

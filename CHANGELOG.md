@@ -1,3 +1,13 @@
+## 5.2.0 (2026-04-20)
+
+Packaging:
+
+- Migrated from `setup.py` to `pyproject.toml` (PEP 517/518)
+- Removed `tox.ini`; pytest config now in `pyproject.toml`
+- Added `dotenv` optional dependency group
+- Updated `MANIFEST.in` to include CHANGELOG and LICENSE
+- Bumped `__version__` to 5.2.0 and added `__author_email__`
+
 ## 5.1.0 (2026-04-20)
 
 Features:
