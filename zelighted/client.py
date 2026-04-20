@@ -1,11 +1,10 @@
 from base64 import b64encode
 import json
-from six import b
-from six.moves.urllib_parse import urljoin
+from urllib.parse import urljoin
 from collections import namedtuple
 
-import delighted
-from delighted.errors import (
+import zelighted
+from zelighted.errors import (
     AuthenticationError,
     GeneralAPIError,
     ResourceValidationError,
@@ -13,26 +12,26 @@ from delighted.errors import (
     TooManyRequestsError,
     UnsupportedFormatRequestedError,
 )
-from delighted.util import encode
+from zelighted.util import encode
 
 
 class Client(object):
 
     def __init__(self, api_key=None, api_base_url=None, http_adapter=None):
-        self.api_key = api_key or delighted.api_key
-        self.api_base_url = api_base_url or delighted.api_base_url
-        self.http_adapter = http_adapter or delighted.http_adapter
+        self.api_key = api_key or zelighted.api_key
+        self.api_base_url = api_base_url or zelighted.api_base_url
+        self.http_adapter = http_adapter or zelighted.http_adapter
 
         if self.api_key is None:
             raise ValueError("You must provide an API key by setting " +
-                             "delighted.api_key = '123abc' or passing " +
+                             "zelighted.api_key = '123abc' or passing " +
                              "api_key='abc123' when instantiating client.")
 
     def request(self, method, url, headers={}, params={}, full_url=False):
         headers['Accept'] = 'application/json'
         headers['Authorization'] = 'Basic %s' % \
-            (b64encode(b(self.api_key)).decode('ascii'))
-        headers['User-Agent'] = "Delighted Python %s" % delighted.__version__
+            (b64encode(self.api_key.encode('ascii')).decode('ascii'))
+        headers['User-Agent'] = "Zelighted Python %s" % zelighted.__version__
         if method in ('post', 'put', 'delete'):
             headers['Content-Type'] = 'application/json'
 

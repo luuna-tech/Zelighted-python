@@ -1,3 +1,14 @@
+## 5.0.0 (2026-04-20)
+
+Rebranding:
+
+- Renamed package from `delighted` to `zelighted`
+- Updated all imports, references, and error classes (`DelightedError` → `ZelightedError`)
+- Removed `six` dependency; Python 3 native equivalents used throughout
+- Removed Delighted sunset deprecation warning
+- Updated `setup.py`: author, email, URL, classifiers (Python 3.8–3.11 only)
+- Updated `tox.ini`: Python 3.8–3.11 environments only
+
 ## 4.2.0 (2026-03-11)
 
 Deprecation:

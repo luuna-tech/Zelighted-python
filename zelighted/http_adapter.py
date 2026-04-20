@@ -1,6 +1,6 @@
 import requests
 
-from delighted.http_response import HTTPResponse
+from zelighted.http_response import HTTPResponse
 
 
 class HTTPAdapter(object):

@@ -1,9 +1,8 @@
-import six
 import time
-from six.moves.urllib_parse import quote
+from urllib.parse import quote
 
-from delighted import get_shared_client
-from delighted.errors import TooManyRequestsError
+from zelighted import get_shared_client
+from zelighted.errors import TooManyRequestsError
 
 
 class Resource(dict):
@@ -15,13 +14,13 @@ class Resource(dict):
             object.__setattr__(self, 'id', attrs['id'])
 
         if hasattr(self.__class__, 'expandable_attributes'):
-            for attr, klass in six.iteritems(self.expandable_attributes):
+            for attr, klass in self.expandable_attributes.items():
                 if attr in attrs and isinstance(attrs[attr], dict):
                     expandable_attrs = attrs.pop(attr)
                     item_id = expandable_attrs['id']
                     super(Resource, self).__setitem__(attr, klass(expandable_attrs))
 
-        for k, v in six.iteritems(attrs):
+        for k, v in attrs.items():
             super(Resource, self).__setitem__(k, v)
 
     def __setattr__(self, k, v):
@@ -193,14 +192,12 @@ class ListObject:
     def auto_paging_iter(self, auto_handle_rate_limits=False):
         while True:
             try:
-                # Get next (or first) page
                 if self.iteration_count == 0:
                     result = self.client.request('get', self.path, {}, self.params)
                 else:
                     result = self.client.request('get', self.next_link, full_url=True)
             except TooManyRequestsError as e:
                 if auto_handle_rate_limits:
-                    # Sleep and retry call
                     time.sleep(e.retry_after)
                     continue
                 else:

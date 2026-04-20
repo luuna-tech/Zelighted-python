@@ -1,4 +1,4 @@
-class DelightedError(Exception):
+class ZelightedError(Exception):
 
     def __init__(self, response):
         self.response = response
@@ -9,23 +9,22 @@ class DelightedError(Exception):
     __str__ = __repr__
 
 
-class AuthenticationError(DelightedError):
+class AuthenticationError(ZelightedError):
     """401, api auth missing or incorrect."""
     pass
 
 
-class UnsupportedFormatRequestedError(DelightedError):
+class UnsupportedFormatRequestedError(ZelightedError):
     """406, invalid format in Accept header."""
     pass
 
 
-class ResourceValidationError(DelightedError):
+class ResourceValidationError(ZelightedError):
     """422, validation errors."""
     pass
 
 
-
-class TooManyRequestsError(DelightedError):
+class TooManyRequestsError(ZelightedError):
     """429, rate limited."""
 
     def __init__(self, response):
@@ -33,12 +32,11 @@ class TooManyRequestsError(DelightedError):
         self.retry_after = int(response.headers['Retry-After'])
 
 
-
-class GeneralAPIError(DelightedError):
+class GeneralAPIError(ZelightedError):
     """500, general/unknown error."""
     pass
 
 
-class ServiceUnavailableError(DelightedError):
+class ServiceUnavailableError(ZelightedError):
     """503, maintenance or overloaded."""
     pass
