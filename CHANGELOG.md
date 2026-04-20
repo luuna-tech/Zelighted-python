@@ -1,5 +1,15 @@
 ## 5.1.0 (2026-04-20)
 
+Packaging:
+
+- Migrated from `setup.py` to `pyproject.toml` (PEP 517/518)
+- Removed `tox.ini`; pytest config now in `pyproject.toml`
+- Added `dotenv` optional dependency group
+- Updated `MANIFEST.in` to include CHANGELOG and LICENSE
+- Added `__author_email__`
+
+## 5.1.0 (2026-04-20)
+
 Features:
 
 - Multi-environment support: `ENVIRONMENTS` dict with `develop`, `staging`, `production` presets
