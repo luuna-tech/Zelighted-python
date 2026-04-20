@@ -1,5 +1,7 @@
 # Zelighted API Python Client
 
+[![CI](https://github.com/luuna-tech/Zelighted-python/actions/workflows/ci.yml/badge.svg)](https://github.com/luuna-tech/Zelighted-python/actions/workflows/ci.yml)
+
 Python client for the Zelighted API.
 
 ## Installation
@@ -238,10 +240,11 @@ metrics_from_custom_client = zelighted.Metrics.retrieve(client=client)
 5. Push to the branch (`git push origin my-new-feature`)
 6. Create new Pull Request
 
-## Releasing
+## Release Process
 
-1. Bump the version in `zelighted/__init__.py`.
-2. Update the README and CHANGELOG as needed.
-3. Tag the commit for release.
-4. Create the distribution `python setup.py sdist`
-5. Upload to PyPI with `twine upload dist/PACKAGE_NAME`.
+1. Bump `__version__` in `zelighted/__init__.py` (e.g. `5.1.0` → `5.2.0`)
+2. Add a matching entry to `CHANGELOG.md`
+3. Push to `master`
+4. CI automatically: runs tests → detects version bump → builds package → uploads to PyPI → creates GitHub Release with changelog notes → pushes git tag `v{version}`
+
+> **Prerequisite:** `PYPI_API_TOKEN` must be set as a repository secret in GitHub → Settings → Secrets and variables → Actions.

@@ -1,0 +1,70 @@
+name: Release
+
+on:
+  push:
+    branches: [master]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Detect version change
+        id: version
+        run: |
+          CURRENT=$(python -c "import re; m = re.search(r\"__version__ = '([^']+)'\", open('zelighted/__init__.py').read()); print(m.group(1))")
+          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          echo "current=$CURRENT" >> "$GITHUB_OUTPUT"
+          echo "latest_tag=$LATEST_TAG" >> "$GITHUB_OUTPUT"
+          if [ -z "$LATEST_TAG" ] || [ "v$CURRENT" != "$LATEST_TAG" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build package
+        if: steps.version.outputs.changed == 'true'
+        run: |
+          pip install build twine
+          python -m build
+
+      - name: Publish to PyPI
+        if: steps.version.outputs.changed == 'true'
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+        run: twine upload dist/*
+
+      - name: Extract CHANGELOG section
+        if: steps.version.outputs.changed == 'true'
+        id: changelog
+        run: |
+          VERSION=${{ steps.version.outputs.current }}
+          awk "/^## $VERSION/,/^## [0-9]/" CHANGELOG.md \
+            | head -n -1 \
+            | tail -n +2 \
+            > /tmp/release-notes.md
+
+      - name: Create GitHub release and tag
+        if: steps.version.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION=${{ steps.version.outputs.current }}
+          git tag "v$VERSION"
+          git push origin "v$VERSION"
+          gh release create "v$VERSION" \
+            --title "v$VERSION" \
+            --notes-file /tmp/release-notes.md
