@@ -1,5 +1,7 @@
 # Zelighted API Python Client
 
+[![CI](https://github.com/luuna-tech/Zelighted-python/actions/workflows/ci.yml/badge.svg)](https://github.com/luuna-tech/Zelighted-python/actions/workflows/ci.yml)
+
 Python client for the Zelighted API.
 
 ## Installation
