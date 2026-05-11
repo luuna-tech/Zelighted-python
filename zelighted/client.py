@@ -31,7 +31,7 @@ class Client(object):
     def request(self, method, url, headers={}, params={}, full_url=False):
         headers['Accept'] = 'application/json'
         headers['Authorization'] = 'Basic %s' % \
-            (b64encode(('%s:' % self.api_key).encode('ascii')).decode('ascii'))
+            (b64encode(self.api_key.encode('ascii')).decode('ascii'))
         headers['User-Agent'] = "Zelighted Python %s" % zelighted.__version__
         if method in ('post', 'put', 'delete'):
             headers['Content-Type'] = 'application/json'
