@@ -98,6 +98,59 @@ zelighted.Person.delete(email="user@example.com")
 zelighted.Person.delete(phone_number="+14155551212")
 ```
 
+#### `skip_dispatch` — generate a survey link without sending email/SMS
+
+Use `skip_dispatch=True` when you want to control delivery yourself: the API creates
+the `SurveyRequest` and returns a ready-to-use `survey_link_url`, but no email or SMS
+is dispatched.
+
+Common use cases:
+- Embed the survey link in your own transactional email template
+- Send via WhatsApp, push notification, or in-app banner
+- Pre-generate links in bulk before a campaign send
+
+```python
+import zelighted
+
+person = zelighted.Person.create(
+    email="user@example.com",
+    name="Jane Doe",
+    send=True,           # must be True — creates the SurveyRequest
+    skip_dispatch=True,  # skip email/SMS, return the link instead
+)
+
+survey_url = person["survey_link_url"]
+# → "https://surveys.zeb.mx/s/06a3302d-18fd-7d60-8000-3cd747e9edcf"
+
+# Now hand survey_url to your own delivery channel:
+send_whatsapp(to=person["id"], url=survey_url)
+```
+
+You can also target a specific survey:
+
+```python
+person = zelighted.Person.create(
+    email="user@example.com",
+    send=True,
+    skip_dispatch=True,
+    survey_id="069d9318-77e3-7925-8000-9e4d985cebbb",
+)
+survey_url = person["survey_link_url"]
+```
+
+**Notes:**
+- `survey_link_url` is only present in the response when `skip_dispatch=True`. It is `None` on normal sends.
+- The link is single-use and tied to this person + survey combination.
+- Throttle rules still apply — if the person was surveyed recently, `send_status` will be `throttled` and `survey_link_url` will be absent.
+
+```python
+if person.get("send_status") == "throttled":
+    retry_in = person.get("retry_after_days")
+    print(f"Throttled — retry in {retry_in} days")
+elif person.get("survey_link_url"):
+    send_my_email(to=person["email"], url=person["survey_link_url"])
+```
+
 ### SurveyResponse
 
 ```python
