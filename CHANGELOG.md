@@ -1,3 +1,9 @@
+## 5.1.2 (2026-06-17)
+
+Features:
+
+- `Person.create(skip_dispatch=True)` — creates a SurveyRequest and returns `survey_link_url` without dispatching email/SMS. Useful for generating survey links to embed in your own communications.
+
 ## 5.1.0 (2026-04-20)
 
 Packaging:

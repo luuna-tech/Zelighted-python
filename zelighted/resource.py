@@ -118,6 +118,37 @@ class Metrics(RetrievableResource):
 class Person(ListResource, AllResource, CreateableResource, DeleteableResource):
     path = 'people'
 
+    @classmethod
+    def create(self, **params):
+        """Create or update a person and optionally send a survey.
+
+        Parameters
+        ----------
+        email : str, optional
+        name : str, optional
+        phone_number : str, optional
+        properties : dict, optional
+        send : bool, default True
+            Whether to send the survey.
+        skip_dispatch : bool, default False
+            When True, creates the SurveyRequest and returns ``survey_link_url``
+            in the response without dispatching any email or SMS.
+        survey_id : str, optional
+            Target a specific survey (UUID string).
+        delay : int, default 0
+            Delay in seconds before sending.
+        channel : str, default "email"
+
+        Returns
+        -------
+        Person
+            A Person resource. When ``skip_dispatch=True`` the response includes
+            ``survey_link_url`` with the ready-to-use survey URL.
+        """
+        self._set_client(params)
+        j = self.client.request_json('post', self.path, {}, params)
+        return self(j)
+
 
 class SurveyRequest(Resource):
     path = 'people/%s/survey_requests/pending'
