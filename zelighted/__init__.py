@@ -35,6 +35,8 @@ def configure(api_key=None, api_base_url=None):
     if api_key is not None:
         _z.api_key = api_key
 
+    _z.shared_client = None  # reset singleton so next call rebuilds with new config
+
 
 from zelighted.client import Client  # noqa
 from zelighted.resource import (  # noqa
