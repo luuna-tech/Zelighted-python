@@ -498,6 +498,24 @@ class TestResource(ZelightedTestCase):
 
         self.assertEqual(5, context.exception.retry_after)
 
+    def test_rate_limit_response_no_retry_after_header(self, client=None):
+        """AC2: 429 without Retry-After header must not raise KeyError; defaults to 60."""
+        self.mock_response(429, {}, {})
+
+        with self.assertRaises(zelighted.errors.TooManyRequestsError) as context:
+            zelighted.Metrics.retrieve(client=client)
+
+        self.assertEqual(60, context.exception.retry_after)
+
+    def test_rate_limit_response_lowercase_retry_after_header(self, client=None):
+        """AC3: case-insensitive match — lowercase 'retry-after' header is found."""
+        self.mock_response(429, {'retry-after': '30'}, {})
+
+        with self.assertRaises(zelighted.errors.TooManyRequestsError) as context:
+            zelighted.Metrics.retrieve(client=client)
+
+        self.assertEqual(30, context.exception.retry_after)
+
     @classmethod
     def _naive_date_to_epoch_seconds(cls, date_obj, timezone):
         naive_dt = naive_date_to_datetime(date_obj)
