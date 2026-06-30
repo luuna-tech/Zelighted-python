@@ -29,7 +29,11 @@ class TooManyRequestsError(ZelightedError):
 
     def __init__(self, response):
         super(TooManyRequestsError, self).__init__(response)
-        self.retry_after = int(response.headers['Retry-After'])
+        retry_header = next(
+            (v for k, v in response.headers.items() if k.lower() == 'retry-after'),
+            None,
+        )
+        self.retry_after = int(retry_header) if retry_header else 60
 
 
 class GeneralAPIError(ZelightedError):
